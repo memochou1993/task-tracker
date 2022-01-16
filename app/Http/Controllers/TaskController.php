@@ -17,18 +17,8 @@ class TaskController extends Controller
     public function index()
     {
         return User::query()->with([
-            'tasks.tasks',
+            'tasks.subtasks',
         ])->first();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -50,18 +40,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Task $task)
-    {
-        //
+        return $task;
     }
 
     /**

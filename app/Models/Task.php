@@ -9,7 +9,12 @@ class Task extends Model
 {
     use HasFactory;
 
-    public function tasks()
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->with(['subtasks'])->where('id', $value)->firstOrFail();
+    }
+
+    public function subtasks()
     {
         return $this->hasMany(Task::class, 'parent_id');
     }
