@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use App\Models\User;
+use Symfony\Component\HttpFoundation\Response;
 
 class TaskController extends Controller
 {
@@ -16,6 +17,7 @@ class TaskController extends Controller
      */
     public function index()
     {
+        // FIXME
         return User::query()->with([
             'tasks.subtasks',
         ])->first();
@@ -29,7 +31,11 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+        // FIXME
+        /** @var User $user */
+        $user = User::query()->first();
+
+        $user->tasks()->create($request->all());
     }
 
     /**
@@ -40,6 +46,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        // FIXME
         return $task;
     }
 
@@ -52,7 +59,10 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        // FIXME
+        $task->update($request->all());
+
+        return $task;
     }
 
     /**
@@ -63,6 +73,9 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        // FIXME
+        $task->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
