@@ -4,7 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property array $subtasks
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property User $user
+ */
 class Task extends Model
 {
     use HasFactory;
@@ -20,10 +31,19 @@ class Task extends Model
 
     public function resolveRouteBinding($value, $field = null)
     {
-        return $this->with(['subtasks'])->where('id', $value)->firstOrFail();
+        return $this
+            ->query()
+            ->where('id', $value)
+            ->with(['subtasks'])
+            ->firstOrFail();
     }
 
-    public function subtasks()
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function subtasks(): HasMany
     {
         return $this->hasMany(Task::class, 'parent_id');
     }

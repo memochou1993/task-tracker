@@ -4,76 +4,80 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
-use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Symfony\Component\HttpFoundation\Response;
 
 class TaskController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     */
+    public function __construct() {
+        $this->authorizeResource(Task::class);
+    }
+
+    /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request): AnonymousResourceCollection
     {
-        // FIXME
-        return User::query()->with([
-            'tasks.subtasks',
-        ])->first();
+        $tasks = $request->user()->tasks()->paginate();
+
+        return TaskResource::collection($tasks);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreTaskRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreTaskRequest $request
+     * @return TaskResource
      */
-    public function store(StoreTaskRequest $request)
+    public function store(StoreTaskRequest $request): TaskResource
     {
-        // FIXME
-        /** @var User $user */
-        $user = User::query()->first();
+        $task = $request->user()->tasks()->create($request->all());
 
-        $user->tasks()->create($request->all());
+        return new TaskResource($task);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
+     * @param Task $task
+     * @return TaskResource
      */
-    public function show(Task $task)
+    public function show(Task $task): TaskResource
     {
-        // FIXME
-        return $task;
+        return new TaskResource($task);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateTaskRequest  $request
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
+     * @param UpdateTaskRequest $request
+     * @param Task $task
+     * @return TaskResource
      */
-    public function update(UpdateTaskRequest $request, Task $task)
+    public function update(UpdateTaskRequest $request, Task $task): TaskResource
     {
-        // FIXME
         $task->update($request->all());
 
-        return $task;
+        return new TaskResource($task);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
+     * @param Task $task
+     * @return Response
      */
-    public function destroy(Task $task)
+    public function destroy(Task $task): Response
     {
-        // FIXME
         $task->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
