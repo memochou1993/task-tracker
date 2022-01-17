@@ -27,6 +27,7 @@ class Task extends Model
      */
     protected $fillable = [
         'name',
+        'parent_id',
     ];
 
     public function resolveRouteBinding($value, $field = null)

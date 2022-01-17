@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTaskRequest;
-use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Requests\TaskStoreRequest;
+use App\Http\Requests\TaskUpdateRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -35,10 +35,10 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param StoreTaskRequest $request
+     * @param TaskStoreRequest $request
      * @return TaskResource
      */
-    public function store(StoreTaskRequest $request): TaskResource
+    public function store(TaskStoreRequest $request): TaskResource
     {
         $task = $request->user()->tasks()->create($request->all());
 
@@ -59,11 +59,11 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param UpdateTaskRequest $request
+     * @param TaskUpdateRequest $request
      * @param Task $task
      * @return TaskResource
      */
-    public function update(UpdateTaskRequest $request, Task $task): TaskResource
+    public function update(TaskUpdateRequest $request, Task $task): TaskResource
     {
         $task->update($request->all());
 

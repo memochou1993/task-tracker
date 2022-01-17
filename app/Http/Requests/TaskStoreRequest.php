@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreTaskRequest extends FormRequest
+class TaskStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,6 +27,9 @@ class StoreTaskRequest extends FormRequest
         return [
             'name' => [
                 'min:1',
+            ],
+            'parent_id' => [
+                Rule::in($this->user()->tasks->pluck('id')),
             ],
         ];
     }
